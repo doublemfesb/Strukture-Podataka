@@ -1,1 +1,66 @@
 
+#include<stdio.h>
+
+typedef struct student
+
+{
+
+char ime[50];
+
+char prezime[50];
+
+int bodovi;
+
+} Student;
+
+
+int main()
+
+{
+
+int bodovi = 0;
+
+int i;
+
+Student *student = NULL; // struct student
+
+FILE *fp = NULL;
+
+char ime[50] = { 0 };
+
+
+fp = fopen("student.txt", "r");
+
+if (NULL == fp)
+
+{
+
+printf("Greška");
+
+return 1;
+
+}
+
+while (!feof(fp))
+
+{
+
+fgets(ime, 50, fp);
+
+if (fgets(fp) == '\n')
+
+bodovi++;
+
+}
+
+
+printf("broj studenata iznosi %d\n ", bodovi);
+
+student= (struct student*) malloc
+
+fclose(fp);
+
+
+return 0;
+
+}
