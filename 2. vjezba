@@ -1,0 +1,142 @@
+/*
+Zadatak 2.
+Definirati strukturu osoba (ime, prezime, godina ro?enja) i napisati program koji:
+a) dinamieki dodaje novi element na poeetak liste,
+b) ispisuje listu,
+c) dinamieki dodaje novi element na kraj liste,
+d) pronalazi element u listi (po prezimenu),
+e) briše odre?eni element iz liste,
+U zadatku se ne smiju koristiti globalne varijable. */
+
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+
+struct _osoba; //treba nam kako bi mogli definirati pokazivac na strukturu osoba
+
+typedef struct _osoba *pozicija; //pokazivac na strukturu osoba
+
+typedef struct _osoba  //radimo strukturu _osoba
+{
+	char ime[100];
+	char prezime[100];
+	int godina;
+	struct pozicija* next;
+
+}osoba; //nazivamo strukturu 'osoba' zbog jednostavnosti
+
+void DodajNaPocetak(pozicija);
+void Ispisi(pozicija);
+void DodajNaKraj(pozicija);
+pozicija PronadiEl(pozicija);
+void BrisiEl(pozicija);
+pozicija NadiPrethodni(pozicija);
+
+
+
+int main()
+{
+	struct osoba head; //stvaramo head liste tipa strukture osoba
+	head=(pozicija)malloc(sizeof(osoba)); //dinamicki alociramo memoriju za head
+	pozicija student=NULL;
+	head.next=NULL;//head stavljamo na pocetak memorije
+	
+	
+	printf("Unesi ime:");
+	DodajNaPocetak(&head);
+	printf("Unesi prezime:");
+	DodajNaPocetak(&head);
+	printf("Unesi godinu rodenja:");
+	DodajNaPocetak(&head);
+	printf("\n");
+	
+	Ispisi(&head);
+	student=PronadiEl(&head); //poziva funkciju PronadiEl
+	printf("Trazili ste %s %s %d\n", student->ime, student->prezime, student->godina);
+	printf("\n");
+	BrisiEl(&head);
+	printf("\n");
+	printf("Ovo je struktura nakon brisanja:\n");
+	Ispisi(&head);
+	return 0;
+	
+}
+void DodajNaPocetak(pozicija s);
+{
+	pozicija q;
+	q=(pozicija)malloc(sizeof(struct osoba)); //dinamicki alociramo memoriju za q
+	printf("Unesite ime, prezime i godinu rodenja:\n");
+	scanf("%s %s %d", q->ime,q->prezime,&q->godina); //mora & je je broj
+	q->next=s->next; //vezemo listu, pokazivac od q je pokazivac od s
+	s->next=q;	
+	
+}
+void DodajNaKraj(pozicija s);
+{
+	while(s->next!=NULL)
+	s=s->next; //pokazivac s je jednak pokazivacu na iducu strukturu, na ovaj nacin unosi na kraj liste
+	
+	DodajNaPocetak(s); //zovemo funkciju DodajNaPocetak
+}
+
+void Ispisi(pozicija s)
+{
+	s=s->next; //krece se od prvog, ali moze se i od heada
+	while(s!=NULL)
+	 {
+	 	printf("%s %s %d\n", s->ime, s->prezime, s->godina);
+	 	s=s->next; //pomice se na iduci clan
+	 }
+		
+}
+pozicija PronadiEl(pozicija s); //trazit cemo element po prezimenu
+{
+	char *prezime; //radimo pokazivac na prezime
+	prezime=(char*)malloc(100*sizeof(char));
+	printf("Koje prezime trazite?\n");
+	scanf("%s", prezime);
+	while(s!=NULL&&strcmpi(s->prezime, prezime)!=0) // ako jesu nula, znaci da su isti
+	s=s->next;
+	if(s==NULL)
+	return NULL; //ako smo upisali prezime kojeg nema vraca null
+	else
+	return s;
+	
+}
+pozicija NadiPrethodni(pozicija s);
+{
+	char *ime;
+	ime=(char*)malloc(100*sizeof(char));
+	printf("Koje ime trazite?");
+	scanf("%s", ime);
+	pozicija Prethodni=s; //definiramo da je prethodni s
+	s=s->next;
+	while(S!NULL&&strcmpi(s->ime, ime)!=0)
+	{
+		Prethodni=s; //prethodni ide na misto S, a s ide dalje
+		s=s->next;
+	}
+	free(ime); //brisemo ime
+	if(NULL==s)
+	return NULL;
+	else
+	return Prethodni;
+		
+}
+void BrisiEl(pozicija s);
+{
+	
+
+pozicija temp;
+s=NadiPrethodni(s); //treba nam pozicija od onog prije da se on moze povezat s onim koji ide iza elementa kojeg brisemo
+if(NULL==s)
+	printf("Ime ne postoji");
+	else
+	{
+		temp=s->next;
+		s->next=s->next->next; //preskace temp
+		free(temp); //temp ide ca
+	}
+
+}
