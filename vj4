@@ -1,0 +1,64 @@
+/*4. Napisati program za zbrajanje i množenje polinoma. Koeficijenti i eksponenti se
+čitaju iz datoteke.
+Napomena: Eksponenti u datoteci nisu nužno sortirani. */
+
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#include<ctype.h>
+#define BUFFER_LENGTH 1024
+
+typedef struct polinom *listaP;
+struct polinom {
+// public:
+	int koeficijent;
+	int eksponent;
+	listaP next;
+};
+
+
+void Unos(listaP, int ,int );
+void Umnozak(listaP, listaP, listaP);
+void Zbroj(listaP, listaP,listaP);
+void Ispis(char *ime,listaP);
+
+int main()
+{
+
+
+
+    return 0;
+}
+
+void Unos(listaP p, int koef,int eksp)
+{
+	listaP q;
+
+	int eks;
+	while(p->next!=NULL && p->next->eksponent>eksp)
+		p=p.next;
+
+
+
+
+}
+
+void Umnozak(listaP)
+{
+
+
+
+}
+
+void Zbroj(listaP)
+{
+
+
+}
+
+void Ispis(listaP)
+{
+
+
+}
