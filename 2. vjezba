@@ -132,6 +132,42 @@ pozicija NadiPrethodni(pozicija s);
 		return Prethodni;
 
 }
+
+pozicija Sortiraj(pozicija s)
+{
+	ozicija i, j, k, temp, kraj; 
+
+	kraj = NULL;
+	
+	i = P;
+	
+	while (i->Next != kraj)
+	{
+		k = i;
+		j = i->Next;
+		while(j->Next!= kraj)
+		{
+			if(strcmp(j->prezime, j->Next->prezime)>0)
+			{
+				temp = j->Next;
+				k->Next = temp;
+				j->Next = temp->Next;
+				temp->Next = j;
+
+				j= temp;
+			}
+
+			k=j;
+			j = j->Next;
+		}
+		kraj = j;
+	}
+
+}
+
+
+
+
 void BrisiEl(pozicija s)
 { 
 	pozicija temp;
@@ -145,4 +181,62 @@ void BrisiEl(pozicija s)
 		free(s);
 	}
 
+}
+
+
+
+void Ucitaj(pozicija s)
+{
+	FILE *dat;
+	char naziv[10];
+	pozicija temp;
+
+	printf("\nUnesite naziv datoteke:");
+	scanf(" %s", naziv);
+
+	dat = fopen(naziv, "r");
+	
+	if (NULL == dat)
+		printf("\n Greska!Datoteka je nepostojeca");
+	else
+	{
+		while(feof(dat)==0)
+		{
+			temp = (pozicija)malloc(sizeof(struct osoba));
+			
+			fscanf(dat, " %s %s %d", temp->ime, temp->prezime, &temp->godina);
+
+			temp->Next = P->Next;
+			p->Next= temp;
+			p = temp;
+		}
+
+		fclose(dat);
+	}
+}
+
+void Citaj(pozicija s)
+{
+	FILE *dat;
+	char naziv[10];
+
+	printf("\nUnesite naziv datpteke za spremanje");
+	scanf(" %s", naziv);
+
+	dat = fopen(naziv, "w");
+	
+	if (NULL == dat)
+		printf("Greska!");
+	else
+	{
+		while(p!=NULL)
+		{
+			fprintf(dat, "\n %s %s %d", p->ime, p->prezime, p->godina);
+			p = p->Next;
+		}
+
+	
+	
+	fclose(dat);
+	}
 }
