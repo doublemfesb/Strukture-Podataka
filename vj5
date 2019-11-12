@@ -1,0 +1,104 @@
+/*5. Za dvije sortirane liste L1 i L2 (mogu se pročitati iz datoteke ili unijeti ručno, bitno je
+samo da su sortirane), napisati program koji stvara novu vezanu listu tako da računa:
+a) L1UNIJAL2,
+b) L1PRESJEKL2.
+Liste osim pokazivača na slijedeću strukturu imaju i jedan cjelobrojni element, po
+kojem su sortirane.*/
+#ifdef _MSC_VER
+#define _CRT_SECURE_NO_WARNINGS
+#endif
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#define BUFFER 1024
+
+#ifndef SUCCESS
+#define SUCCESS 0
+#endif
+
+#ifndef ERROR
+#define ERROR -1
+#endif
+
+
+struct _lista;
+typedef struct _lista* position;
+
+typedef struct _lista
+{
+	int koeficijent; //podaci
+	position Next; //pokazivač na sljedeći član
+} lista;
+
+
+int PrintMenu();   // ?????????????????????????
+int StvoriNovu(position *);
+int Ucitaj(position);
+int PrintList(position);
+int Presijek(position, position, position);
+int Unija(position, position, position);
+
+
+int main()
+{
+	int err = SUCCESS;
+	struct _lista l1;
+	struct _lista l2;
+
+	struct _lista unija;
+	struct _lista presjek;
+
+	err = PrintMenu();
+	if (err) return err;
+
+	position head = NULL;
+	head->Next = NULL;
+	 // ne dinamicki alocirati!
+
+
+	
+	printf("\r\n\tLista 1.");
+	err = Ucitaj(&l1);
+	if (err)return err;
+	printf("\r\n\t\tL1 : ");
+	PrintList(l1.Next);
+
+	
+	printf("\r\n\tLista 2.");
+	Ucitaj(&l2);
+	if (err)return err;
+	printf("\r\n\t\tL2 : ");
+	PrintList(l2.Next);
+
+	return 0;
+}
+
+int StvoriNovu(position *head)
+{
+	position p = NULL;
+
+	*head = (position)malloc(sizeof(_lista));
+	if (*head == NULL) return ERROR;
+
+	p = *head;
+	p->Next = NULL;
+
+	return SUCCESS;
+}
+
+
+
+int Ucitaj(position p)
+{
+	int err = SUCCESS; 
+	position p = NULL;
+	position temp = NULL;
+
+
+
+
+
+	return err; 
+}
