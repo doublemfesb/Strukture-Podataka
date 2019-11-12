@@ -18,7 +18,7 @@ struct polinom
 
 void CitajIzDat(listP);
 void Ispis(listP);
-void Unos(listP,int,int);
+void Unos(listP,int,int); // ZBOG KOEFICIJENTA I POTENCIJE
 void Zbroj(listP,listP,listP);
 void Umnozak(listP,listP,listP);
 
@@ -29,21 +29,27 @@ int main()
     struct polinom pol2;
     struct polinom Zbr;
     struct polinom Umn;
+    
+    //postavljanje na NULL
     Umn.next=NULL;
     Zbr.next=NULL;
     pol1.next=NULL;
     pol2.next=NULL;
+    
+    //POZIVI
     CitajIzDat(&pol1);
-    printf("Struktura polinom 1:\n");
+    printf("Struktura polinom1:\n");
     Ispis(pol1.next);
     CitajIzDat(&pol2);
-    printf("Struktura polinom 2:\n");
+    printf("Struktura polinom2:\n");
     Ispis(pol2.next);
     printf("\n");
+    
     Zbroj(pol1.next,pol2.next,&Zbr);
     printf("Zbroj polinoma:\n");
     Ispis(Zbr.next);
     printf("\n");
+    
     Umnozak(pol1.next,pol2.next,&Umn);
     printf("Umnozak polinoma:\n");
     Ispis(Umn.next);
