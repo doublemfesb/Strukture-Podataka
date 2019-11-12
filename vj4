@@ -2,63 +2,156 @@
 čitaju iz datoteke.
 Napomena: Eksponenti u datoteci nisu nužno sortirani. */
 
-#define _CRT_SECURE_NO_WARNINGS
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
-#include<ctype.h>
-#define BUFFER_LENGTH 1024
+#define _CRT_SECURE_NO_WARNINGS 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#define BUFFER 1024
 
-typedef struct polinom *listaP;
-struct polinom {
-// public:
-	int koeficijent;
-	int eksponent;
-	listaP next;
+typedef struct polinom *listP;
+struct polinom
+{
+    int koeficijent;
+    int potencija;
+    listP next;
 };
 
+void CitajIzDat(listP);
+void Ispis(listP);
+void Unos(listP,int,int);
+void Zbroj(listP,listP,listP);
+void Umnozak(listP,listP,listP);
 
-void Unos(listaP, int ,int );
-void Umnozak(listaP, listaP, listaP);
-void Zbroj(listaP, listaP,listaP);
-void Ispis(char *ime,listaP);
 
 int main()
 {
-
-
+	struct polinom pol1;
+    struct polinom pol2;
+    struct polinom Zbr;
+    struct polinom Umn;
+    Umn.next=NULL;
+    Zbr.next=NULL;
+    pol1.next=NULL;
+    pol2.next=NULL;
+    CitajIzDat(&pol1);
+    printf("Struktura polinom 1:\n");
+    Ispis(pol1.next);
+    CitajIzDat(&pol2);
+    printf("Struktura polinom 2:\n");
+    Ispis(pol2.next);
+    printf("\n");
+    Zbroj(pol1.next,pol2.next,&Zbr);
+    printf("Zbroj polinoma:\n");
+    Ispis(Zbr.next);
+    printf("\n");
+    Umnozak(pol1.next,pol2.next,&Umn);
+    printf("Umnozak polinoma:\n");
+    Ispis(Umn.next);
+    printf("\n");
 
     return 0;
-}
-
-void Unos(listaP p, int koef,int eksp)
-{
-	listaP q;
-
-	int eks;
-	while(p->next!=NULL && p->next->eksponent>eksp)
-		p=p.next;
-
-
-
 
 }
 
-void Umnozak(listaP)
+void CitajIzDat(listP s)
 {
+    FILE*fp=NULL;
+    char*FileName=NULL;
+    FileName=(char*)malloc(BUFFER*sizeof(char));
+    if(FileName==NULL)
+        printf("Datoteka se ne moze otvoriti");
+    printf("Pnesite datoteku za citanje:\n");
+    scanf("%s",FileName);
+    if(strchr(FileName,".")==0)
+	strcat(FileName,".txt"); //?
+    fp=fopen(FileName,"r");
+    if(fp==NULL)
+        printf("greska!");
+    while(!feof(fp))
+    {
+        listP q;
+        q=(listP)malloc(sizeof(struct polinom));
+        fscanf(fp,"%d %d",&q->koeficijent,&q->potencija);
+        q->next=s->next;
+        s->next=q;
+        s=s->next;
+    }
+    fclose(fp);
+}
 
 
+void Ispis(listP p)
+{
+    if(p==NULL)
+    printf("Greska");
+    while(p!=NULL)
+    {
+        printf("%d %d\n",p->koeficijent,p->potencija);
+        p=p->next;
+    }
 
 }
 
-void Zbroj(listaP)
+
+void Unos(listP p,int koef,int pot)
 {
-
-
+    listP q;
+    while(p->next!=NULL && p->next->potencija>pot)
+        p=p->next;
+        if(p->next!=NULL && p->next->potencija==pot)
+        p->next->koeficijent+=koef;
+        else
+        {
+        q=(listP)malloc(sizeof(struct polinom));
+        q->koeficijent=koef;
+        q->potencija=pot;
+        q->next=p->next;
+        p->next=q;
+        }
 }
 
-void Ispis(listaP)
-{
 
+void Zbroj(listP p1,listP p2,listP s)
+{
+    listP temp;
+    while(p1!=NULL && p2!=NULL)
+    {
+        if(p1->potencija==p2->potencija)
+        {
+            unos(s,p1->koeficijent+p2->koeficijent,p1->potencija);
+            p1=p1->next;
+            p2=p2->next;
+        }
+        else if(p1->potencija>p2->potencija){
+            Unos(s,p1->koeficijent,p1->potencija);
+            p1=p1->next;
+        }
+        else
+        {
+            Unos(s,p2->koeficijent,p2->potencija);
+            p2=p2->next;
+        }
+    }
+    if(p1!=NULL)
+        temp=p1;
+    else temp=p2;
+    while(temp!=NULL)
+	{
+        Unos(s,temp->koeficijent,temp->potencija);
+        temp=temp->next;
+    }
+}
+void Umnozak(listP p1,listP p2,listP s)
+{
+    listP pocetak=p2;
+    while(p1!=NULL){
+        while(p2!=NULL)
+		{
+            Unos(s,p1->koeficijent*p2->koeficijent,p1->potencija+p2->potencija);
+            p2=p2->next;
+        }
+        p1=p1->next;
+        p2=pocetak;
+    }
 
 }
