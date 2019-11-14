@@ -1,3 +1,4 @@
+
 /*2. Definirati strukturu osoba (ime, prezime, godina rođenja) i napisati program koji:
 a) dinamički dodaje novi element na početak liste,
 b) ispisuje listu,
@@ -21,7 +22,7 @@ e) čita listu iz datoteke.*/
 #include<ctype.h>
 struct _osoba; //treba nam kako bi mogli definirati pokazivac na strukturu osoba
 
-typedef struct _osoba *pozicija; //pokazivac na strukturu osoba
+typedef struct _osoba* pozicija; //pokazivac na strukturu osoba
 
 typedef struct _osoba  //radimo strukturu _osoba
 {
@@ -51,25 +52,21 @@ int main()
 	pozicija student = NULL;
 	head->next = NULL;//head stavljamo na pocetak memorije
 
-	             
-	printf("Unesi ime:");
-	DodajNaPocetak(head);
-	printf("Unesi prezime:");
-	DodajNaPocetak(head);
-	printf("Unesi godinu rodenja:");
+
+	
 	DodajNaPocetak(head);
 	printf("\n");
 
-	Ispisi(head);                  
+	Ispisi(head);
 	student = PronadiEl(&head); //poziva funkciju pronadi element
-	printf("Trazili ste %s %s %d\n" , student->ime, student->prezime, student->godina);
+	printf("Trazili ste %s %s %d\n", student->ime, student->prezime, student->godina);
 	printf("\n");
 	BrisiEl(&head);
 	printf("\n");
 	printf("Ovo je struktura nakon brisanja:\n");
 	Ispisi(&head);
 	return 0;
-	    
+
 }
 void DodajNaPocetak(pozicija s);
 {
@@ -84,8 +81,10 @@ void DodajNaPocetak(pozicija s);
 void DodajNaKraj(pozicija s);
 {
 	while (s->next != NULL)
+	{ 
 		s = s->next; //pokazivac s je jednak pokazivacu na iducu strukturu, na ovaj nacin unosi na kraj liste
 
+	}
 	DodajNaPocetak(s); //zovemo funkciju DodajNaPocetak
 }
 
@@ -96,15 +95,15 @@ void Ispisi(pozicija s)
 	{
 		printf("%s %s %d\n", s->ime, s->prezime, s->godina);
 		s = s->next; //pomice se na iduci clan
-	}    
-}     
+	}
+}
 pozicija PronadiEl(pozicija s); //trazit cemo element po prezimenu
 {
-	char *prezime; //radimo pokazivac na prezime
+	char* prezime; //radimo pokazivac na prezime
 	prezime = (char*)malloc(100 * sizeof(char));
 	printf("Koje prezime trazite?\n");
 	scanf("%s", prezime);
-	while (s != NULL&&strcmpi(s->prezime, prezime) != 0) // ako jesu nula, znaci da su isti
+	while (s != NULL && strcmpi(s->prezime, prezime) != 0) // ako jesu nula, znaci da su isti
 		s = s->next;
 	if (s == NULL)
 		return NULL; //ako smo upisali prezime kojeg nema vraca null
@@ -113,17 +112,17 @@ pozicija PronadiEl(pozicija s); //trazit cemo element po prezimenu
 
 }
 pozicija NadiPrethodni(pozicija s);
-{ 
-	char *ime;
+{
+	char* ime;
 	ime = (char*)malloc(100 * sizeof(char));
 	printf("Koje ime trazite?");
 	scanf("%s", ime);
-	pozicija Prethodni = s; //definiramo da je prethodni s
+	pozicija Prethodni = s; //definiramo da je prethodni s jer nema ništa šta je prije prvog člana
 	s = s->next;
-	while (S!NULL&&strcmpi(s->ime, ime) != 0)
+	while (S!NULL && strcmpi(s->ime, ime) != 0)
 	{
 		Prethodni = s; //prethodni ide na misto S, a s ide dalje
-		s = s->next; 
+		s = s->next;
 	}
 	free(ime); //brisemo ime
 	if (NULL == s)
@@ -135,29 +134,29 @@ pozicija NadiPrethodni(pozicija s);
 
 pozicija Sortiraj(pozicija s)
 {
-	ozicija i, j, k, temp, kraj; 
+	pozicija i, j, k, temp, kraj;
 
 	kraj = NULL;
-	
-	i = P;
-	
+
+	i = s;
+
 	while (i->Next != kraj)
 	{
 		k = i;
 		j = i->Next;
-		while(j->Next!= kraj)
+		while (j->Next != kraj)
 		{
-			if(strcmp(j->prezime, j->Next->prezime)>0)
+			if (strcmp(j->prezime, j->Next->prezime) > 0)
 			{
 				temp = j->Next;
 				k->Next = temp;
 				j->Next = temp->Next;
 				temp->Next = j;
 
-				j= temp;
+				j = temp;
 			}
 
-			k=j;
+			k = j;
 			j = j->Next;
 		}
 		kraj = j;
@@ -169,7 +168,7 @@ pozicija Sortiraj(pozicija s)
 
 
 void BrisiEl(pozicija s)
-{ 
+{
 	pozicija temp;
 	pozicija prethodni = NULL;
 	prethodni = NadiPrethodni(s); //treba nam pozicija od onog prije da se on moze povezat s onim koji ide iza elementa kojeg brisemo
@@ -178,7 +177,8 @@ void BrisiEl(pozicija s)
 	else
 	{
 		temp->next = s->next;
-		free(s);
+		free(s); //prvo oslobodimo s jer ako oslobodimo temp zaboravimo di je s
+		//FALI DIO KODA!!!!!!!
 	}
 
 }
@@ -187,7 +187,7 @@ void BrisiEl(pozicija s)
 
 void Ucitaj(pozicija s)
 {
-	FILE *dat;
+	FILE* dat;
 	char naziv[10];
 	pozicija temp;
 
@@ -195,20 +195,20 @@ void Ucitaj(pozicija s)
 	scanf(" %s", naziv);
 
 	dat = fopen(naziv, "r");
-	
+
 	if (NULL == dat)
 		printf("\n Greska!Datoteka je nepostojeca");
 	else
 	{
-		while(feof(dat)==0)
+		while (feof(dat) == 0)
 		{
-			temp = (pozicija)malloc(sizeof(struct osoba));
-			
+			temp = (pozicija)malloc(sizeof(osoba));
+
 			fscanf(dat, " %s %s %d", temp->ime, temp->prezime, &temp->godina);
 
-			temp->Next = P->Next;
-			p->Next= temp;
-			p = temp;
+			temp->next = s->next;
+			s->next = temp;
+			s = temp;
 		}
 
 		fclose(dat);
@@ -217,26 +217,27 @@ void Ucitaj(pozicija s)
 
 void Citaj(pozicija s)
 {
-	FILE *dat;
+	FILE* dat;
 	char naziv[10];
 
 	printf("\nUnesite naziv datpteke za spremanje");
 	scanf(" %s", naziv);
 
 	dat = fopen(naziv, "w");
-	
+
 	if (NULL == dat)
 		printf("Greska!");
 	else
 	{
-		while(p!=NULL)
+		while (s != NULL)
 		{
-			fprintf(dat, "\n %s %s %d", p->ime, p->prezime, p->godina);
-			p = p->Next;
+			fprintf(dat, "\n %s %s %d", s->ime, s->prezime, s->godina);
+			
+				s= s->next;
 		}
 
-	
-	
-	fclose(dat);
+
+
+		fclose(dat);
 	}
 }
