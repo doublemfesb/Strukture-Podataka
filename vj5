@@ -1,104 +1,331 @@
+
 /*5. Za dvije sortirane liste L1 i L2 (mogu se pročitati iz datoteke ili unijeti ručno, bitno je
+2
 samo da su sortirane), napisati program koji stvara novu vezanu listu tako da računa:
+3
 a) L1UNIJAL2,
+4
 b) L1PRESJEKL2.
+5
 Liste osim pokazivača na slijedeću strukturu imaju i jedan cjelobrojni element, po
+6
 kojem su sortirane.*/
+7
 #ifdef _MSC_VER
+8
 #define _CRT_SECURE_NO_WARNINGS
+9
 #endif
-
-
+10
+?
+11
+?
+12
 #include <stdio.h>
+13
 #include <stdlib.h>
+14
 #include <string.h>
+15
 #define BUFFER 1024
-
+16
+?
+17
 #ifndef SUCCESS
+18
 #define SUCCESS 0
+19
 #endif
-
+20
+?
+21
 #ifndef ERROR
+22
 #define ERROR -1
+23
 #endif
-
-
+24
+?
+25
+?
+26
 struct _lista;
+27
 typedef struct _lista* position;
-
+28
+?
+29
 typedef struct _lista
+30
 {
-	int koeficijent; //podaci
-	position Next; //pokazivač na sljedeći član
+31
+        int koeficijent; //podaci
+32
+        position Next; //pokazivač na sljedeći član
+33
 } lista;
-
-
+34
+?
+35
+?
+36
 int PrintMenu();   // ?????????????????????????
+37
 int StvoriNovu(position *);
+38
 int Ucitaj(position);
+39
 int PrintList(position);
+40
 int Presijek(position, position, position);
+41
 int Unija(position, position, position);
-
-
+42
+?
+43
+?
+44
 int main()
+45
 {
-	int err = SUCCESS;
-	struct _lista l1;
-	struct _lista l2;
+46
+        int err = SUCCESS;
+47
+        lista lista1;
+48
+        lista lista2;
+        
+        lista presjek, unija;
+        
+        lista1.Next=NULL;
+        lista2.Next=NULL;
+        presjek.Next=NULL;
+        unija.Next=NULL;
+        
+        err = PrintMenu(); //???
+	if (err) return err; //??
 
-	struct _lista unija;
-	struct _lista presjek;
-
-	err = PrintMenu();
+    err = Ucitaj(&lista1);
+	if (err)return err;
+	printf("\r\n\t\Lista 1 : ");
+	PrintList(lista1.Next);
+	
+	 err = Ucitaj(&lista2);
+	if (err)return err;
+	printf("\r\n\t\Lista 2 : ");
+	PrintList(lista2.Next);
+        
+     err = Presijek(lista1.Next, lista2.Next, &presjek);
 	if (err) return err;
+	printf("\r\n\t\tPresijek : ");
+	PrintList(presjek.Next);
+           
+      err = Unija(lista1.Next, lista2.Next, &unija);
+	if (err) return err;
+	printf("\r\n\t\tUnija : ");
+	PrintList(unija.Next);
+  
+        	printf("\r\n\r\n");
 
-	position head = NULL;
-	head->Next = NULL;
-	 // ne dinamicki alocirati!
-
-
-	
-	printf("\r\n\tLista 1.");
-	err = Ucitaj(&l1);
-	if (err)return err;
-	printf("\r\n\t\tL1 : ");
-	PrintList(l1.Next);
-
-	
-	printf("\r\n\tLista 2.");
-	Ucitaj(&l2);
-	if (err)return err;
-	printf("\r\n\t\tL2 : ");
-	PrintList(l2.Next);
-
-	return 0;
+	return err;
 }
-
-int StvoriNovu(position *head)
+        int StvoriNovu(pozicija *s)
 {
-	position p = NULL;
+	pozicija q = NULL;
 
-	*head = (position)malloc(sizeof(_lista));
-	if (*head == NULL) return ERROR;
+	*s = (pozicija)malloc(sizeof(_lista));
+	if (s == NULL) return ERROR;
 
-	p = *head;
-	p->Next = NULL;
+	q=*s;
+	q->Next = NULL;
 
 	return SUCCESS;
 }
-
-
-
-int Ucitaj(position p)
+int Citaj(pozicija P)
 {
-	int err = SUCCESS; 
-	position p = NULL;
-	position temp = NULL;
+	int err = SUCCESS;
+	pozicija q = NULL;
+	pozicija tmp = NULL;
+	char *fileName = NULL;
+	FILE *fp = NULL;
 
+	fileName = (char*)malloc(sizeof(char) * BUFFER_LENGTH);
+	if (fileName == NULL) return ERROR;
+	memset(fileName, '\0', BUFFER_LENGTH);
 
+	printf("\r\n\tUnesite ime dadoteke za citanje : ");
+	scanf(" %s", fileName);
 
+	if (strchr(fileName, '.') == NULL)
+		strcat(fileName, ".txt");
 
+	fp = fopen(fileName, "r");
+	if (fp == NULL)
+	{
+		printf("\r\nGRESKA!\r\n%s datoteka nije otvorena.", fileName);
+		return ERROR;
+	}
 
-	return err; 
+	while (!feof(fp))
+	{
+		err = StvoriNovu(&q);
+		if (err)
+		{
+			printf("\r\nGRESKA!\r\nMemorija nije alocirana.");
+			break;
+		}
+
+		fscanf(fp, " %d", &q->koeficijent);
+
+		tmp = P;
+		while (tmp->Next != NULL && tmp->Next->koeficijent >= q->koeficijent)
+			tmp = tmp->Next;
+
+		q->Next = tmp->Next;
+		tmp->Next = q;
+	}
+	fclose(fp);
+
+	return err;
 }
+        
+      int PrintMenu()
+{
+	printf("\r\n\t********************************************");
+	printf("\r\n\t***   VJEZBA BR. 05  -  Unija i presijek ***");
+	printf("\r\n\t********************************************");
+	printf("\r\n\r\n");
+
+	return SUCCESS;
+}  
+        
+      int PrintList(pozicija P)
+{
+	while (P != NULL)
+	{
+		printf(" %d", P->koeficijent);
+		P = P->Next;
+	}
+
+	return SUCCESS;
+}  
+
+
+
+
+
+
+  int Presijek(pozicija lista1, pozicija lista2, pozicija P)
+{
+	int err = SUCCESS;
+	pozicija q = NULL;
+
+	while (lista1 && lista2)
+	{
+		if (lista1->koeficijent > lista2->koeficijent)
+			lista1 = lista1->Next;
+		else if (lista1->koeficijent < lista2->koeficijent)
+			lista2 = lista2->Next;
+		else
+		{
+			err = StvoriNovu(&q);
+			if (err)
+			{
+				printf("\r\nGRESKA!\r\nMemorija nije alocirana.");
+				break;
+			}
+
+			q->koeficijent = lista1->koeficijent;
+			q->Next = P->Next;
+			P->Next = q;
+			P = q;
+
+			lista1 = lista1->Next;
+			lista2 = lista2->Next;
+		}
+	}
+
+	return err;
+}
+        
+        
+int Unija(pozicija lista1, pozicija lista2, pozicija U)
+{
+	int err = SUCCESS;
+	pozicija q, tmp;
+
+	while (lista1 && lista2)
+	{
+		err = StvoriNovu(&q);
+		if (err)
+		{
+			printf("\r\nGRESKA!\r\nMemorija nije alocirana.");
+			break;
+		}
+		else
+		{
+			if (lista1->koeficijent > lista2->koeficijent)
+			{
+				q->koeficijent = lista1->koeficijent;
+				lista1 = lista1->Next;
+			}
+			else if (lista1->koeficijent < lista1->koeficijent)
+			{
+				q->koeficijent = lista2->koeficijent;
+				lista2 = lista2->Next;
+			}
+			else
+			{
+				q->koeficijent = lista1->koeficijent;
+				lista1 = lista1->Next;
+				lista2 = lista2->Next;
+			}
+
+			if (U->koeficijent == q->koeficijent)
+				free(q);
+			else
+			{
+				q->Next = U->Next;
+				U->Next = q;
+				U = q;
+			}
+		}
+	}
+
+	if (err) return err;
+
+	if (lista1)
+		tmp = lista1;
+	else
+		tmp = lista2;
+
+	while (tmp)
+	{
+		err = StvoriNovu(&q);
+		if (err)
+		{
+			printf("\r\nGRESKA!\r\nMemorija nije alocirana.");
+			break;
+		}
+
+		q->koeficijent = tmp->koeficijent;
+
+		if (U->koeficijent == q->koeficijent)
+		{
+			free(q);
+		}
+		else
+		{
+			q->Next = U->Next;
+			U->Next = q;
+			U = q;
+		}
+
+		tmp = tmp->Next;
+	}
+
+	return err;
+}
+        
+       
+
