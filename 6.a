@@ -1,0 +1,127 @@
+
+Napisati program koji pomocu vezanih listi simulira rad stoga
+
+Napomena: Funkcija "push" sprema cijeli broj, slucajno generirani u opsegu od 10 -100
+*/
+
+#define CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+
+
+#define PRAZAN -4
+#define ERROR -1
+#define KRIVOSLOVO -2
+
+
+typedef struct cvor*stog;
+struct cvor{
+    int el;
+    stog next;
+};
+
+//metode
+
+stog StvoriStog(stog,int);
+
+//Slucajni broj 
+int Slucajni(int,int);
+//STAVI NA STOG
+int push(stog,int);
+
+void Ispis(stog);
+//SKINI SA STOGA
+int pop(stog); 
+
+//ISPIS
+void Ispis(stog);
+
+int main()
+{
+    struct cvor st;
+    st.next=NULL;
+    
+    char c;
+    int y=PRAZAN;
+    int er=ERROR;
+    
+    
+    Ispis(st.next);
+    
+    printf("elite li skiniti element sa stoga? (D ili N)");
+    scanf(" %c",&c);
+    while(c!='D' && c!='N'){
+            printf("unijeli ste krivo slovo");
+            return KRIVOSLOVO;
+        }
+    if(c=='D'|| c=='N'){
+        y=pop(&st);
+        if(y==-4)
+            return y;
+        er=pop(st);
+        if(er==-1){
+            printf("greska kod stvaranja");
+            return er;
+        }
+        printf("zelite li skiniti element sa stoga?");
+        scanf(" %c",&c);
+        
+    }
+    
+    printf("Ispis prvog stoga\n");
+    Ispis(st.next);
+    
+    return 0;
+}
+//ima dva argumenta jer je ogranicen sa 10 i 100
+int Slucajni(int min,int max)
+{
+    return rand() % (max-min) + min;
+}
+
+stog StvoriStog(stog S,int x)
+{
+    stog nova=NULL;
+    S=(struct cvor*)malloc(sizeof(struct cvor));
+    nova=S;
+    nova->el=x;
+    nova->next=NULL;
+    
+    return nova;
+    
+}
+
+
+
+int push(int x, stog S)
+{
+    stog q;
+    q=(stog)malloc(sizeof(s));
+    q->el=x;
+    q->next=S->next;
+    S->next=q;
+}
+
+int pop(stog S)
+{
+    stog temp;
+    int x;
+    if(S->next!=NULL)
+    
+        temp=S->next;
+        S->next=temp->next;
+        x=temp->el;
+        free(temp);  
+        
+       return x;
+}
+
+void Ispis(stog S)
+{
+    while(S!=NULL){
+        printf("%d\n",S->el);
+        S=S->next;
+    }
+}
