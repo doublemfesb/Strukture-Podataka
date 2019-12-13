@@ -144,25 +144,25 @@ void Postfix(char*str,stog S)
             printf("%d",b);
             if(b==-3)
                 return b;
-            if(strcmp(str,'+')==0)
+            if(strcmp(str,"+")==0)
             {
                 z=push(b+a,S);
                 if(z==-1)
                     return z;
             }
-            else if(strcmp(str,'-')==0)
+            else if(strcmp(str,"-")==0)
             {
                 z=push(b-a,S);
                 if(z==-1)
                     return z;
             }
-            else if(strcmp(str,'*')==0)
+            else if(strcmp(str,"*")==0)
             {
                 z=push(b*a,S);
                 if(z==-1)
                     return z;
             }
             else
-                printf("Znak nije operand");
+                printf("Greska");
         }
 }
