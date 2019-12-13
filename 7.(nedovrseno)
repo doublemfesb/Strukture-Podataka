@@ -1,0 +1,84 @@
+/*Napisati program koji iz datoteke cita postfiks izraz i zatim korištenjem stoga racuna
+rezultat. Stog je potrebno realizirati preko vezane liste.*/
+
+#include <stdio.h>
+#include <ctype.h>
+#include <stdlib.h>
+
+#define BUFFER 1024
+
+#define TOP -1  //Krecemo od nule
+
+
+typedef struct cvor*stog;
+struct cvor{
+    int element;
+    stog next;
+};
+
+//prvi korak - uzmi iz dat
+int CitanjeStoga(stog);
+//stvaranje strukture
+stog Stvor(stog,int);
+
+//osnovne operacije
+int StaviNaStog(int,stog);
+int SkiniSaStoga(stog);
+
+void Postfix(char*, stog);
+
+
+int main()
+{
+	int rez=0;
+	struct cvor =0;
+	cv.next==NULL;
+	
+	rez=CitanjeStoga(stog);
+	if(rez=-1)
+	   return rez;
+	   
+    printf("Rez je %d",rez);
+	return 0;	   
+
+}
+
+int CitanjeStoga(stog)
+{
+	int rez;
+    FILE*fp=NULL;
+    
+    char*FileName=NULL;
+     FileName=(char*)malloc(BUFFER*sizeof(char));
+    if(FileName==NULL){
+        printf("Greska pri alokacji");
+        return ERROR;
+    }
+    
+    char*str=NULL;
+    str=(char*)malloc(BUFFER*sizeof(char));
+    if(str==NULL)
+    {
+        printf("greska pri alokaciji");
+        return ERROR;
+    }
+    
+    printf("Unesite datoteku za citanje:\n");
+    scanf("%s",FileName);
+    if(strchr(FileName,".")==0)
+        strcat(FileName,".txt");
+    fp=fopen(FileName,"r");
+    if(fp==NULL){
+        printf("Greska:");
+        return NERADI;
+    }
+    while(!feof(fp))
+    {
+        fscanf(fp,"%s",str);
+        Postfix(str,S);
+    }
+    rez=pop(S);
+    fclose(fp);
+    return rez;
+}
+	
