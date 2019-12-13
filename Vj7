@@ -1,0 +1,168 @@
+/*Napisati program koji iz datoteke čita postfiks izraz i zatim korištenjem stoga računa
+rezultat. Stog je potrebno realizirati preko vezane liste.*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#define ERROR -1
+#define OK 0
+#define NERADI -2
+#define PRAZAN -3
+#define BUFFER 1024
+#define OPERATOR -5
+typedef struct cvor*stog;
+struct cvor{
+    int element;
+    stog next;
+};
+int ReadFromFile(stog);
+int JeLiBroj(char*,int*);
+stog CreateStructure(stog,int);
+int push(int,stog);
+int pop(stog);
+void Postfix(char*,stog);
+int main()
+{
+    int rezultat=0;
+    struct cvor cv;
+    cv.next=NULL;
+    
+    rez=ReadFromFile(&cv);
+    if(rezultat==-1 || rezultat==-2 || rezultat==-3)
+        return rezultat;
+    printf("rezultat je:%d",rezultat);
+    return 0;
+}
+stog CreateStructure(stog S,int x)
+{
+    stog new=NULL;
+    S=(stog)malloc(sizeof(struct cvor));
+    new=S;
+    new->el=x;
+    return new;
+}
+int push(int x,stog S)
+{
+    stog new=NULL;
+    new=CreateStructure(S,x);
+    if(new==NULL){
+        printf("Greska pri alokaciji");
+        return ERROR;
+    }
+    new->next=S->next;
+    S->next=new;
+    return OK;
+    
+}
+int pop(stog S)
+{
+    int x;
+    stog temp;
+    if(S!=NULL){
+        /*if(S->next==NULL){
+            printf("Ne moze se vise skinuti, stog je prazan\n");
+            return PRAZAN;
+        }*/
+        
+            temp=S->next;
+            S->next=temp->next;
+            x=temp->el;
+            free(temp);
+        
+        
+    }
+    return x;
+}
+int ReadFromFile(stog S)
+{
+    int rez;
+    FILE*fp=NULL;
+    
+    char*FileName=NULL;
+     FileName=(char*)malloc(BUFFER*sizeof(char));
+    if(FileName==NULL){
+        printf("Greska pri alokacji");
+        return ERROR;
+    }
+    
+    char*str=NULL;
+    str=(char*)malloc(BUFFER*sizeof(char));
+    if(str==NULL)
+    {
+        printf("greska pri alokaciji");
+        return ERROR;
+    }
+    
+    printf("Unesite datoteku za citanje:\n");
+    scanf("%s",FileName);
+    if(strchr(FileName,".")==0)
+        strcat(FileName,".txt");
+    fp=fopen(FileName,"r");
+    if(fp==NULL){
+        printf("Ne moze se otvoriti datoteka:");
+        return NERADI;
+    }
+    while(!feof(fp))
+    {
+        fscanf(fp,"%s",str);
+        Postfix(str,S);
+    }
+    rez=pop(S);
+    fclose(fp);
+    return rez;
+}
+
+int JeLiBroj(char*str,int* broj)
+{
+    int x;
+    x=sscanf(str,"%d",broj);
+    if(x==EOF || x==0 || x!=1)
+        return ERROR;
+    else
+        return OK;
+}
+
+void Postfix(char*str,stog S)
+{
+    int x,broj,z;
+    x=JeLiBroj(str,&broj);
+    if(x==0)
+    {
+        z=push(broj,S);
+        if(z==-1)
+            return z;
+    }
+        else
+        {
+            int a,b;
+            a=pop(S);
+            printf("%d",a);
+            if(a==-3)
+                return a;
+            
+            b=pop(S);
+            printf("%d",b);
+            if(b==-3)
+                return b;
+            if(strcmp(str,'+')==0)
+            {
+                z=push(b+a,S);
+                if(z==-1)
+                    return z;
+            }
+            else if(strcmp(str,'-')==0)
+            {
+                z=push(b-a,S);
+                if(z==-1)
+                    return z;
+            }
+            else if(strcmp(str,'*')==0)
+            {
+                z=push(b*a,S);
+                if(z==-1)
+                    return z;
+            }
+            else
+                printf("Znak nije operand");
+        }
+}
