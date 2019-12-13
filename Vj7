@@ -136,12 +136,12 @@ void Postfix(char*str,stog S)
         {
             int a,b;
             a=pop(S);
-            printf("%d",a);
+           
             if(a==-3)
                 return a;
             
             b=pop(S);
-            printf("%d",b);
+    
             if(b==-3)
                 return b;
             if(strcmp(str,"+")==0)
