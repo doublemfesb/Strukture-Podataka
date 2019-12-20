@@ -1,0 +1,26 @@
+/*
+Napisati program koji omogućava rad s binarnim stablom pretraživanja. Treba
+omogućiti unošenje novog elementa u stablo, ispis elemenata, brisanje i pronalaženje
+nekog elementa.
+*/
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#include<ctype.h>
+#include<time.h>
+
+typedef struct CvorStabla *Stablo;
+typedef struct CvorStabla *Pozicija;
+struct CvorStabla
+{
+	int El;
+	Stablo Lijevo;
+	Stablo Desno;
+
+
+}
+Stablo StvoriPrazno(Stablo S);
+Pozicija Trazi(int x, Stablo S);
+Stablo Dodaj(int x, Stablo S);
+Stablo Brisi(int x, Stablo S);
+void Ispis(Stablo S);
