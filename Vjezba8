@@ -1,0 +1,238 @@
+/*
+Napisati program koji pomoću vezanih listi (stabala) predstavlja strukturu direktorija.
+Omogućiti unos novih direktorija i pod-direktorija, ispis sadržaja direktorija i
+povratak u prethodni direktorij. Točnije program treba preko menija simulirati
+korištenje DOS naredbi: 1- "md", 2 - "cd dir", 3 - "cd..", 4 - "dir" i 5 – izlaz.
+*/
+#ifdef _MSC_VER
+#define _CRT_SECURE_NO_WARNINGS
+#endif
+
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#include<ctype.h>
+
+
+struct direktorij;
+typedef struct direktorij dir;
+typedef struct direktorij *Cvor;
+
+struct _Stog;
+typedef struct _Stog *Stog;
+
+struct direktorij
+{
+	char ime[10];
+	Node Next;
+	Node Child;
+};
+
+struct _Stog
+{
+	Node Element;
+	Stog Next;
+};
+
+void IspisDir(Cvor, char *);
+Cvor IzadiDir(Cvor, char *, Stog);
+Cvor UdiDir(Cvor, char *, char *, Stog);
+void StvoriDir(Cvor, char *);
+void Push(Stog, Cvor);
+Node Pop(Stog);
+
+void main()
+{ 
+	char instr[20], ime[10], naredba[10], path[100];
+	char *i, *j;
+	dir root;
+	struct _Stog S;
+
+	Cvor UpDir = &root;
+	S.Next = NULL;
+
+	printf("Unesi ime root direktorija: ");
+	scanf(" %s", root.ime);
+	root.Child = NULL;
+	root.Next = NULL;
+	
+	path[0] = 0;
+	strcat(path, root.ime);
+	strcat(path, ":\\");
+
+	system("cls");
+	
+	printf("Unesi naredbu:");
+	printf("\n\tdir");
+	printf("\n\tcd..");
+	printf("\n\tcd ime_dir");
+	printf("\n\tmk ime_dir");
+	printf("\n\n\texit - za kraj");
+	printf("\n\n\t");
+
+	fgets(instr, 20,stdin);
+	
+		while(strcmp(naredba, "exit")!=0)
+	{
+		printf("\n\n\t%s",path);
+		
+		strset(ime, 0);
+		strset(naredba, 0);
+
+		fgets(instr, 20,stdin);
+
+		i = strchr(instr, ' ');
+		
+		if (NULL == i)
+		{
+			strncpy(naredba, instr, sizeof(instr));
+			j = strchr(naredba, 10);
+			*j = 0;
+		}
+		else
+		{
+			strncpy(naredba, instr, i - instr);
+			naredba[i-instr] = 0;
+			strcpy(ime, i+1);
+		}
+		
+		
+		if(strcmp(naredba, "dir")==0)
+			IspisDir(UpDir, path);
+		else if(strcmp(naredba, "cd..")==0)
+			UpDir = IzadiDir(UpDir, path, &S);
+		else if(strcmp(naredba, "cd")==0)
+			if(ime[0] == 0)
+				printf("Greska u sintaksi naredbe!\n Treba biti: cd ime_dir");
+			else
+				UpDir = UdiDir(UpDir, ime, path, &S);
+		else if(strcmp(naredba, "mk")==0)
+			if(ime[0] == 0)
+				printf("Greska u sintaksi naredbe!\n Treba biti: mk ime_dir");
+			else
+				StvoriDir(UpDir, ime);
+		else if(strcmp(naredba, "exit")!=0)
+			printf("\nPogresan unos!!\n");
+
+	}
+
+}
+
+	void IspisDir(Cvor N, char * path)
+{
+	int i = 0;
+	printf("\nDirektorij od %s", path);
+	
+	N = N->Child;
+	while(N != NULL)
+	{
+		printf("\n\t\t %s", N->ime);
+		N = N->Next;
+		i++;
+	}
+
+	printf("\n\t\t %d Dir(s)", i);
+
+
+}
+Node IzadiDir(Cvor N, char *path, Stog S)
+{
+	Cvor temp;
+	char *a;
+
+	temp = Pop(S);
+	if(NULL == temp)
+	{
+		printf("Nalazimo se u root direktoriju!\nIz njega se ne moze izaci!");
+		return N;
+	}
+	else
+	{
+		a = strrchr(path, '\\');
+		*a = 0;
+
+		a = strrchr(path, '\\');
+		*(a+1) = 0;
+	
+		return temp;
+	}
+}
+
+Cvor UdiDir(Cvor N, char *ime, char *path, Stog S)
+{
+	Cvor temp = N->Child;
+	char *a;
+
+
+	while(temp != NULL && strcmp(temp->ime, ime)!= 0)
+		temp = temp->Next;
+	if (NULL == temp)
+		printf("\n Ne postoji pod-direktorij s tim imenom!!!");
+	else
+	{
+		Push(S, N);
+		strcat(path, temp->ime);
+		a = strchr(path, 10);
+		*a = '\\';
+		return temp;
+	}
+
+	return N;
+}
+
+void StvoriDir(Cvor N, char *ime)
+{
+	Cvor q;
+
+	q = (Cvor)malloc(sizeof(dir));
+	q->Child = NULL;
+	q->Next = NULL;
+
+	strcpy(q->ime, ime);
+
+	if(NULL == q)
+		printf("\nGreska u alokaciji memorije!!");
+	else
+	{
+		if ( NULL == N->Child)
+			N->Child = q;
+		else
+		{
+			q->Next = N->Child;
+			N->Child = q;
+		}
+	}
+}
+void Push(Stog S, Cvor T)
+{
+	Stog q;
+
+	q = (Stog)malloc(sizeof(struct _Stog));
+
+	if( q==NULL)
+		printf("\nGreska kod alokacije memorije!!");
+	else
+	{
+		q->Element = T;
+		q->Next = S->Next;
+
+		S->Next = q;
+	}
+}
+Cvor Pop(Stog S)
+{
+	Cvor q;
+	Stog temp;
+
+	if(NULL == S->Next)
+		return NULL;
+	else
+	{
+		q = S->Next->Element;
+		temp = S->Next;
+		S->Next = temp->Next;
+
+		free(temp);
+		return q;
+	}
+}
