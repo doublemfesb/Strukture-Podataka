@@ -24,13 +24,13 @@ typedef struct _Stog *Stog;
 struct direktorij
 {
 	char ime[10];
-	Node Next;
-	Node Child;
+	Cvor Next;
+	Cvor Child;
 };
 
 struct _Stog
 {
-	Node Element;
+	Cvor Element;
 	Stog Next;
 };
 
@@ -39,9 +39,9 @@ Cvor IzadiDir(Cvor, char *, Stog);
 Cvor UdiDir(Cvor, char *, char *, Stog);
 void StvoriDir(Cvor, char *);
 void Push(Stog, Cvor);
-Node Pop(Stog);
+Cvor Pop(Stog);
 
-void main()
+int main()
 { 
 	char instr[20], ime[10], naredba[10], path[100];
 	char *i, *j;
@@ -135,7 +135,7 @@ void main()
 
 
 }
-Node IzadiDir(Cvor N, char *path, Stog S)
+Cvor IzadiDir(Cvor N, char *path, Stog S)
 {
 	Cvor temp;
 	char *a;
