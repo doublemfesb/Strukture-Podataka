@@ -9,6 +9,7 @@ nekog elementa.
 #include<string.h>
 #include<ctype.h>
 #include<time.h>
+#include<conio.h>
 #ifndef GRESKA
 #define GRESKA -1
 #endif
@@ -33,24 +34,70 @@ Stablo Brisi(int X, Stablo S);
 int Ispis(Stablo S);
 Pozicija TraziMin(int X, Stablo S);
 
-
-Pozicija Trazi(int X, Stablo S)
+void main() 
 {
-	  if (NULL == S)
-	  {
-		  printf("\n\tElement ne postoji!!");
-		  return NULL;
-	  } 
-	  else if (X < S->El)
-			return Trazi(X, S->Lijevo);
-	  else if (X > S->El)
-			return Trazi(X, S->Desno);
-	  else
-	  return S; 
+	Pozicija root = NULL, temp;
+	int odabir = 0, X;
+	while (odabir != 8)
+	{
+		system("cls");
+		printf("\n\tOdaberi akciju:");
+		printf("\n\t\t 1 -unos novog elementa");
+		printf("\n\t\t 2 -ispis stabla");
+		printf("\n\t\t 3 -trazenje elementa");
+		printf("\n\t\t 4 -brisanje elementa");
+		printf("\n\t\t 5 -trazenje min. elementa");
+		printf("\n\t\t 6 -brisanje stabla");
+		printf("\n\t\t 8 -kraj\n\t");
 
-
-
+		scanf(" %d", &odabir); switch (odabir)
+		{
+		case 1:printf("\n\tUnesi element: ");
+		scanf(" %d", &X);
+		root = Dodaj(X, root);
+		break;
+		case 2:system("cls");
+			Ispis(root);
+			break;
+		case 3:printf("\n\tKoji element trazis?   ");
+			scanf(" %d", &X);
+			temp = Trazi(X, root); 
+			if (temp != NULL)
+				printf("Element %d se nalazi na adresi %d", temp->El, temp);
+			break;
+		case 4:printf("\n\tKoji element zelis izbrisat?   ");
+		scanf(" %d", &X); root = Brisi(X, root);
+		break;
+		case 5:temp = TraziMin(X, root);
+			printf("Minimalni element je %d", temp->El);
+			break;
+		case 6:
+		root = StvoriPrazno(root);
+		case 8:
+		break;
+		default:printf("\n\tKrivi unos!!!");
+		}
+		printf("\nPress any key to continue!");
+		getch();
+	}
 }
+		Pozicija Trazi(int X, Stablo S)
+		{
+			if (NULL == S)
+			{
+				printf("\n\tElement ne postoji!!");
+				return NULL;
+			}
+			else if (X < S->El)
+				return Trazi(X, S->Lijevo);
+			else if (X > S->El)
+				return Trazi(X, S->Desno);
+			else
+				return S;
+
+
+
+		}
 Pozicija TraziMin(int X, Stablo S)
 {
 	while (S!=NULL&&S->Lijevo != NULL)
