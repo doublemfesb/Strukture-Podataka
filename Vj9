@@ -3,15 +3,18 @@ Napisati program koji omogućava rad s binarnim stablom pretraživanja. Treba
 omogućiti unošenje novog elementa u stablo, ispis elemenata, brisanje i pronalaženje
 nekog elementa.
 */
+#define CRT_SECURE_NO_WARNINGS
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
 #include<ctype.h>
 #include<time.h>
+#define GRESKA -1
+
 
 struct CvorStabla;
-typedef struct CvorStabla *Stablo;
-typedef struct CvorStabla *Pozicija;
+typedef struct CvorStabla* Stablo;
+typedef struct CvorStabla* Pozicija;
 struct CvorStabla
 {
 	int El;
@@ -19,18 +22,108 @@ struct CvorStabla
 	Stablo Desno;
 };
 Stablo StvoriPrazno(Stablo S);
-Pozicija Trazi(int x, Stablo S);
-Stablo Dodaj(int x, Stablo S);
-Stablo Brisi(int x, Stablo S);
+Pozicija Trazi(int X, Stablo S);
+Stablo Dodaj(int X, Stablo S);
+Stablo Brisi(int X, Stablo S);
 void Ispis(Stablo S);
+Pozicija TraziMin(int X, Stablo S);
 
 
-
-
-Pozicija Trazi(Stablo S)
+Pozicija Trazi(int X, Stablo S)
 {
+	  if (NULL == S)
+	  {
+		  printf("\n\tElement ne postoji!!");
+		  return NULL;
+	  } 
+	  else if (X < S->El)
+			return Trazi(X, S->Lijevo);
+	  else if (X > S->El)
+			return Trazi(X, S->Desno);
+	  else
+	  return S; 
 
 
 
+}
+Pozicija TraziMin(int X, Stablo S)
+{
+	while (S!=NULL&&S->Lijevo != NULL)
+		S = S->Lijevo;
+	return S;
+}
+Stablo Dodaj(int X, Stablo S)
+{
+	if (NULL == S)
+	{
+		S = (Stablo)malloc(sizeof(struct CvorStabla));
+		if (S == NULL) {
+			printf("Greska pri alokaciji!");
+			return GRESKA;
+		}
 
+		S->Lijevo = NULL;
+		S->Desno = NULL;
+		S->El = X;
+	}
+	else if (X > S->El)
+		S->Desno = Dodaj(X, S->Desno);
+	else if (X < S->El)
+		S->Lijevo = Dodaj(X, S->Lijevo);
+	else
+		printf("Element vec postoji!");
+	return S; 
+}
+Stablo Brisi(int X, Stablo S)
+{
+	Stablo temp;
+	if (NULL == S)
+		printf("Nismo pronasli element!");
+	else if (X < S->El)
+		S->Lijevo = Brisi(X, S->Lijevo); 
+	else if (X > S->El)
+		S->Desno = Brisi(X, S->Desno);
+	else
+	{ 
+		if (S->Lijevo && S->Desno!=NULL)
+	{
+		temp = TraziMin(X, S->Desno);
+		S->El = temp->El; 
+		S->Desno = Brisi(S->El, S->Desno);
+	}
+		else
+		{ 
+			temp = S;
+			if (NULL == S->Lijevo) 
+			{ 
+				S = S->Desno; 
+			} 
+			else if (NULL == S->Desno) 
+			{ 
+				S = S->Lijevo; 
+			}
+			free(temp);
+		} 
+	}
+	return S;
+}
+void Ispis(Stablo S)
+{
+	if (S != NULL) {
+		printf("%d", S->El);
+		Ispis(S->Lijevo);
+		Ispis(S->Desno);
+	}
+
+}
+
+Pozicija StvoriPrazno(Stablo S)
+{ 
+	if (NULL != S)
+	{ 
+		StvoriPrazno(S->Lijevo);
+		StvoriPrazno(S->Desno);
+		free(S); 
+	}
+	return NULL; 
 }
