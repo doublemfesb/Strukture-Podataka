@@ -81,7 +81,7 @@ void main()
 		getch();
 	}
 }
-		Pozicija Trazi(int X, Stablo S)
+Pozicija Trazi(int X, Stablo S)
 		{
 			if (NULL == S)
 			{
