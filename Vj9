@@ -19,6 +19,7 @@ nekog elementa.
 #endif
 enum _TREE_PRINT { INORDER = 1, PREORDER, POSTORDER };
 struct CvorStabla;
+typedef struct cvorStabla Cvor;
 typedef struct CvorStabla* Stablo;
 typedef struct CvorStabla* Pozicija;
 struct CvorStabla
