@@ -9,9 +9,14 @@ nekog elementa.
 #include<string.h>
 #include<ctype.h>
 #include<time.h>
+#ifndef GRESKA
 #define GRESKA -1
+#endif
 
-
+#ifndef SUCCESS
+#define SUCCESS 0
+#endif
+enum _TREE_PRINT { INORDER = 1, PREORDER, POSTORDER };
 struct CvorStabla;
 typedef struct CvorStabla* Stablo;
 typedef struct CvorStabla* Pozicija;
@@ -25,7 +30,7 @@ Stablo StvoriPrazno(Stablo S);
 Pozicija Trazi(int X, Stablo S);
 Stablo Dodaj(int X, Stablo S);
 Stablo Brisi(int X, Stablo S);
-void Ispis(Stablo S);
+int Ispis(Stablo S);
 Pozicija TraziMin(int X, Stablo S);
 
 
@@ -107,14 +112,43 @@ Stablo Brisi(int X, Stablo S)
 	}
 	return S;
 }
-void Ispis(Stablo S)
+int Ispis(int X, Pozicija S)
 {
-	if (S != NULL) {
-		printf("%d", S->El);
-		Ispis(S->Lijevo);
-		Ispis(S->Desno);
+	switch (X)
+	{
+	case INORDER:
+	{
+		if (S != NULL)
+		{
+			Ispis(X, S->Lijevo);
+			printf(" %d", S->El);
+			Ispis(X, S->Desno);
+		}
+	}
+	break;
+	case PREORDER:
+	{
+		if (S != NULL)
+		{
+			printf(" %d", S->El);
+			Ispis(X, S->Lijevo);
+			Ispis(X, S->Desno);
+		}
+	}
+	break;
+	case POSTORDER:
+	{
+		if (S != NULL)
+		{
+			Ispis(X, S->Lijevo);
+			Ispis(X, S->Desno);
+			printf(" %d", S->El);
+		}
+	}
+	break;
 	}
 
+	return SUCCESS;
 }
 
 Pozicija StvoriPrazno(Stablo S)
