@@ -1,0 +1,50 @@
+
+#define CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#include<ctype.h>
+
+#ifndef GRESKA
+#define GRESKA -1
+#endif
+
+#ifndef SUCCESS
+#define SUCCESS 0;
+#endif
+
+typedef struct CvorStabla* Pozicija; 
+struct CvorStabla
+{
+	int El;
+	Pozicija Lijevo;
+	Pozicija Desno;
+};
+typedef struct Stog *St;
+struct Stog {
+	Pozicija IzStabla;
+	St Next;
+};
+
+
+main()
+{
+	sve definicije 
+		naziv filea 
+		zalijepi txt
+		ako je šprazan NULL
+
+
+
+		 SVE FUNKCIJE SU MI INT
+		 ili success ili greska uvijek vracam
+		 pop()
+		 push()
+		 napravinovicvorstabla()ž
+		 napravinovicvorstoga()
+		 izbrisisranja()
+		 izradistablo()
+		 moram imat dvije datoteke
+		 prvu sama radim, druga mora postojati
+
+}
