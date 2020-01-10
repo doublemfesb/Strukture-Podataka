@@ -1,3 +1,4 @@
+
 /*
 Napisati program koji omogućava rad s binarnim stablom pretraživanja. Treba
 omogućiti unošenje novog elementa u stablo, ispis elemenata, brisanje i pronalaženje
@@ -28,6 +29,13 @@ struct CvorStabla
 	Stablo Lijevo;
 	Stablo Desno;
 };
+
+typedef enum _Choice {
+	INSERT = 1,
+	
+
+} Choice;
+
 Stablo StvoriPrazno(Stablo S);
 Pozicija Trazi(int X, Stablo S);
 Stablo Dodaj(int X, Stablo S);
@@ -35,7 +43,7 @@ Stablo Brisi(int X, Stablo S);
 int Ispis(Stablo S);
 Pozicija TraziMin(int X, Stablo S);
 
-void main() 
+int main() 
 {
 	Pozicija root = NULL, temp;
 	int odabir = 0, X;
@@ -53,10 +61,11 @@ void main()
 
 		scanf(" %d", &odabir); switch (odabir)
 		{
-		case 1:printf("\n\tUnesi element: ");
-		scanf(" %d", &X);
-		root = Dodaj(X, root);
-		break;
+		case INSERT:
+			printf("\n\tUnesi element: ");
+			scanf(" %d", &X);
+			root = Dodaj(X, root);
+			break;
 		case 2:system("cls");
 			Ispis(root);
 			break;
@@ -67,44 +76,44 @@ void main()
 				printf("Element %d se nalazi na adresi %d", temp->El, temp);
 			break;
 		case 4:printf("\n\tKoji element zelis izbrisat?   ");
-		scanf(" %d", &X); root = Brisi(X, root);
-		break;
+			scanf(" %d", &X); root = Brisi(X, root);
+			break;
 		case 5:temp = TraziMin(X, root);
 			printf("Minimalni element je %d", temp->El);
 			break;
 		case 6:
-		root = StvoriPrazno(root);
+			root = StvoriPrazno(root);
 		case 8:
-		break;
+			break;
 		default:printf("\n\tKrivi unos!!!");
 		}
 		printf("\nPress any key to continue!");
 		getch();
 	}
 }
+
 Pozicija Trazi(int X, Stablo S)
-		{
-			if (NULL == S)
-			{
-				printf("\n\tElement ne postoji!!");
-				return NULL;
-			}
-			else if (X < S->El)
-				return Trazi(X, S->Lijevo);
-			else if (X > S->El)
-				return Trazi(X, S->Desno);
-			else
-				return S;
+{
+	if (NULL == S)
+	{
+		printf("\n\tElement ne postoji!!");
+		return NULL;
+	}
+	else if (X < S->El)
+		return Trazi(X, S->Lijevo);
+	else if (X > S->El)
+		return Trazi(X, S->Desno);
+	else
+		return S;
+}
 
-
-
-		}
 Pozicija TraziMin(int X, Stablo S)
 {
 	while (S!=NULL&&S->Lijevo != NULL)
 		S = S->Lijevo;
 	return S;
 }
+
 Stablo Dodaj(int X, Stablo S)
 {
 	if (NULL == S)
@@ -112,7 +121,7 @@ Stablo Dodaj(int X, Stablo S)
 		S = (Stablo)malloc(sizeof(struct CvorStabla));
 		if (S == NULL) {
 			printf("Greska pri alokaciji!");
-			return GRESKA;
+			return NULL; //null jer je pointer
 		}
 
 		S->Lijevo = NULL;
@@ -127,6 +136,7 @@ Stablo Dodaj(int X, Stablo S)
 		printf("Element vec postoji!");
 	return S; 
 }
+
 Stablo Brisi(int X, Stablo S)
 {
 	Stablo temp;
@@ -139,11 +149,11 @@ Stablo Brisi(int X, Stablo S)
 	else
 	{ 
 		if (S->Lijevo && S->Desno!=NULL)
-	{
-		temp = TraziMin(X, S->Desno);
-		S->El = temp->El; 
-		S->Desno = Brisi(S->El, S->Desno);
-	}
+		{
+			temp = TraziMin(X, S->Desno);
+			S->El = temp->El; 
+			S->Desno = Brisi(S->El, S->Desno);
+		}
 		else
 		{ 
 			temp = S;
@@ -165,35 +175,35 @@ int Ispis(int X, Pozicija S)
 	switch (X)
 	{
 	case INORDER:
-	{
-		if (S != NULL)
 		{
-			Ispis(X, S->Lijevo);
-			printf(" %d", S->El);
-			Ispis(X, S->Desno);
+			if (S != NULL)
+			{
+				Ispis(X, S->Lijevo);
+				printf(" %d", S->El);
+				Ispis(X, S->Desno);
+			}
 		}
-	}
-	break;
+		break;
 	case PREORDER:
-	{
-		if (S != NULL)
 		{
-			printf(" %d", S->El);
-			Ispis(X, S->Lijevo);
-			Ispis(X, S->Desno);
+			if (S != NULL)
+			{
+				printf(" %d", S->El);
+				Ispis(X, S->Lijevo);
+				Ispis(X, S->Desno);
+			}
 		}
-	}
-	break;
+		break;
 	case POSTORDER:
-	{
-		if (S != NULL)
 		{
-			Ispis(X, S->Lijevo);
-			Ispis(X, S->Desno);
-			printf(" %d", S->El);
+			if (S != NULL)
+			{
+				Ispis(X, S->Lijevo);
+				Ispis(X, S->Desno);
+				printf(" %d", S->El);
+			}
 		}
-	}
-	break;
+		break;
 	}
 
 	return SUCCESS;
