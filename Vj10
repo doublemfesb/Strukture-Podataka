@@ -5,8 +5,8 @@ gotovog stabla proračuna upisati u datoteku infiks izraz.
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-
-typedef struct cvor tree;
+#include<ctype.h>
+typedef struct cvor stablo;
 typedef struct cvor* pozicija;
 typedef struct stog* Stog;
 
