@@ -1,0 +1,100 @@
+/*
+Napisati program koji prvo proeita koliko redaka ima datoteka, tj. koliko ima studenata
+zapisanih u datoteci. Nakon toga potrebno je dinamieki alocirati prostor za niz struktura
+studenata (ime, prezime, bodovi) i ueitati iz datoteke sve zapise. Na ekran ispisati ime,
+prezime,apsolutni i relativni broj bodova.
+Napomena: Svaki redak datoteke sadrži ime i prezime studenta, te broj bodova na kolokviju.
+relativan_br_bodova = br_bodova/max_br_bodova*100
+*/
+
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct student
+{
+    char ime[20];
+    char prezime[20];
+    int bodovi;
+}_ST;
+
+int brojRedaka(char *);
+int dinamickaAlokacija(_ST **, int);
+int ucitaj(char , int, _ST);
+void Ispisi(_ST*, int, int);
+
+int main()
+{
+    _ST *a;
+    int n;
+    char filename[30];
+    int max;
+
+    printf("Upisite ime datoteke iz koje zelite ucitati podatke:");
+    scanf("%s",filename);
+
+    n=brojRedaka(filename);
+    printf("Broj redaka u datoteci:%d\n", n);
+    dinamickaAlokacija(&a,n);
+    max=ucitaj(filename,n,a);
+    Ispisi(a, max, n);
+
+    return 0;
+}
+
+int brojRedaka(char *filename)
+{
+    int n=0;
+
+    FILE *fp=fopen(filename, "r");
+    if(fp==NULL)
+    {
+        printf("Neuspjesno otvaranje datoteke!");
+        return -1;
+    }
+    while(!feof(fp))
+    {
+        if(fgetc(fp)=='\n')
+                 n++;
+    }
+    fclose(fp);
+    return n;
+}
+int dinamickaAlokacija(_ST **a, int n)
+{
+    a=(_ST)malloc(n*sizeof(_ST));
+    return 0;
+}
+int ucitaj(char *filename, int n, _ST*a)
+{
+    int i;
+    int max=0;
+
+    FILE *fp=fopen(filename, "r");
+    if(fp==NULL)
+    {
+        printf("Neuspjesno otvaranje datoteke!");
+        return -1;
+    }
+    while(!feof(fp))
+    {
+        for(i=0;i<n;i++)
+        {
+            fscanf(fp, "%s %s %d", a[i].ime, a[i].prezime, &a[i].bodovi);
+            if(a[i].bodovi>max)
+                max=a[i].bodovi;
+        }
+    }
+    fclose(fp);
+    return max;
+}
+void Ispisi(_ST*a, int max, int n)
+{
+    int i;
+    for(i=0;i<n;i++)
+    {
+        printf("%s %s %d\n", a[i].ime, a[i].prezime, a[i].bodovi);
+        printf("Aps broj bodova je: %d, a relativan je: %f
+               \n", a[i].bodovi, (float)a[i].bodovi/max*100);
+    }
+
+}
