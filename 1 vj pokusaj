@@ -1,0 +1,54 @@
+#include<stdio.h>
+#include<conio.h>
+#include<string.h>
+#define ERROR -1;
+#define SUCCESS 2;
+
+Student student;
+typedef Student* p;
+
+typedef struct 
+{
+	char ime[100];
+	char prezime[100];
+	int bodovi;
+}Student;
+
+
+
+
+
+
+
+int main()
+{
+	int count = 0;
+	Student* s = NULL;
+	FILE* fp = NULL;
+
+	fp = fopen("student.txt", "r");
+
+	if (fp == NULL)
+	{ 
+		printf("Greska!\n");
+	return ERROR;
+	}
+
+	while (!feof(fp))
+	{
+		if (fgetc(fp) == '\n')
+		{
+			count++;
+
+		}
+		fclose(fp);
+		count++;
+
+
+		printf("Broj redaka je: %d\\n", count);
+		return count;
+	}
+
+
+	return 0;
+}
