@@ -1,29 +1,36 @@
+/*
+Napisati program koji prvo pročita koliko redaka ima datoteka, tj. koliko ima studenata
+zapisanih u datoteci. Nakon toga potrebno je dinamički alocirati prostor za niz struktura
+studenata (ime, prezime, bodovi) i učitati iz datoteke sve zapise. Na ekran ispisati ime,
+prezime,apsolutni i relativni broj bodova.
+Napomena: Svaki redak datoteke sadrži ime i prezime studenta, te broj bodova na kolokviju.
+relatvan_br_bodova = br_bodova/max_br_bodova*100
+*/
+
+
+
 #include<stdio.h>
 #include<conio.h>
 #include<string.h>
+#include<stdlib.h>
 #define ERROR -1;
 #define SUCCESS 2;
 
-Student student;
-typedef Student* p;
+typedef struct Student student;
+typedef struct Student* p;
 
-typedef struct 
+struct Student
 {
 	char ime[100];
 	char prezime[100];
 	int bodovi;
-}Student;
-
-
-
-
-
-
+};
 
 int main()
 {
 	int count = 0;
-	Student* s = NULL;
+    char a[50]={0};
+	struct Student* s = NULL;
 	FILE* fp = NULL;
 
 	fp = fopen("student.txt", "r");
@@ -36,19 +43,22 @@ int main()
 
 	while (!feof(fp))
 	{
+		fgets(a, 50, fp);
 		if (fgetc(fp) == '\n')
 		{
 			count++;
 
 		}
-		fclose(fp);
+		
 		count++;
 
-
-		printf("Broj redaka je: %d\\n", count);
+     
+		printf("Broj redaka je: %d\n", count);
+		
 		return count;
+		
 	}
-
+    fclose(fp);
 
 	return 0;
 }
