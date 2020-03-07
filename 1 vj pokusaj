@@ -53,11 +53,12 @@ int main()
 		count++;
 
      
-		printf("Broj redaka je: %d\n", count);
+	
 		
-		return count;
 		
+		puts(a);
 	}
+		printf("Broj redaka je: %d\n", count);
     fclose(fp);
 
 	return 0;
